@@ -34,6 +34,7 @@ jobs:
         env:
           TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
           ALLURE_DETAIL: 'false'
         #run login tests without details with masked password
       - name: Run Login tests
