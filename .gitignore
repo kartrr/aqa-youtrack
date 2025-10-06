@@ -1,0 +1,24 @@
+# Dependencies
+/node_modules
+
+# Local environment variables (!!!)
+.env
+
+# Test results and reports
+/allure-results
+/allure-report
+/test-results
+/playwright-report
+
+# Saved authentication state (!!!contains secrets)
+/playwright/.auth/
+
+# IDE settings
+/.vscode/
+
+# Generated documentation
+/docs
+
+# Logs and temporary files
+*.log
+npm-debug.log*
