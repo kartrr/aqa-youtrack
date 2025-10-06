@@ -19,8 +19,6 @@ export class LoginPage extends BasePage {
         this.errorMessage = page.getByTestId('error-message');
     }
 
-    
-
     async gotoPageUrl() {
         await this.page.goto(this.pageURL);
     }
