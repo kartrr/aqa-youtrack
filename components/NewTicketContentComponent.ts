@@ -6,7 +6,6 @@ export class NewTicketContentComponent {
     readonly submitButton: Locator;
 
     constructor(parent: Page | Locator) {
-        // Мы передаем родительский элемент, чтобы локаторы искали только внутри него
         this.summaryField = parent.getByTestId('summary');
         this.descriptionField = parent.getByTestId('editor description');
         this.submitButton = parent.getByTestId('submit-button');
