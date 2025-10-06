@@ -28,8 +28,16 @@ jobs:
         run: npm ci
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
+        #run setup without details with masked password
+      - name: Run Setup
+        run: npx playwright test --project=setup
+        env:
+          TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+          ALLURE_DETAIL: 'false'
+        #run login tests without details with masked password
       - name: Run Login tests
-        run: npx playwright test --project=setup --project=login-tests
+        run: npx playwright test --project=login-tests
         env:
           TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
