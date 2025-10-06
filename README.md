@@ -2,7 +2,7 @@
 
 This repository contains an end-to-end (**E2E**) test automation framework designed to test the user interface of the **YouTrack Cloud application**, with the live target instance available at **[karter.youtrack.cloud](https://karter.youtrack.cloud)**
 
-The primary goal of this project is to serve as a learning exercise, demonstrating and implementing modern best practices in web automation using **TypeScript** and **Playwright**.
+The primary goal of this project is to serve as a learning exercise, demonstrating and implementing modern best practices in web automation using **TypeScript** and **Playwright** and **Allure Reporting**.
 
 Tests Results: [GitHub Pages](https://kartrr.github.io/aqa-youtrack/)
 
