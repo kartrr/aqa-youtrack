@@ -3,16 +3,15 @@
 # Name for the workflow
 name: Playwright Tests & Allure Report
 
-# Triggers the workflow on push or pull request events for the main branch
+# Triggers the workflow
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions for the GITHUB_TOKEN to allow deployment to GitHub Pages
+# Sets top-level permissions
 permissions:
   contents: read
   pages: write
@@ -26,52 +25,55 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
-
       - name: Install dependencies
         run: npm ci
-
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
-
       - name: Run Playwright tests
-        run: npm test # This will generate allure-results
+        run: npm test
         env:
           TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
-
       - name: Upload Allure results
         uses: actions/upload-artifact@v4
+        if: always() # Always run this step to upload results even if tests fail
         with:
           name: allure-results
           path: allure-results
-          retention-days: 1 # We only need the results for the next job
+          retention-days: 1
 
   # This job generates and deploys the report
   deploy-report:
-    # This job needs the 'test' job to succeed first
     needs: test
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Download Allure results
+      # Step 1: Download the allure-results artifact from the previous job
+      - name: Download allure-results
         uses: actions/download-artifact@v4
         with:
           name: allure-results
+          path: allure-results
 
-      - name: Generate and deploy Allure report to GitHub Pages
-        uses: allure-framework/allure-github-action@v1.6.1
+      # Step 2: Generate the Allure report from the results
+      - name: Generate Allure Report
+        uses: simple-elf/allure-report-action@v1.7
         with:
-          # The path where the report will be generated
-          report_dir: allure-report
-          # The branch to which the report will be deployed
-          gh_pages: gh-pages
-          # A prefix for the report URL
-          report_id: youtrack-aqa-report
-          
+          results_path: allure-results
+          report_path: allure-report
+
+      # Step 3: Upload the generated report as an artifact for deployment
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: allure-report
+
+      # Step 4: Deploy the artifact to GitHub Pages
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
