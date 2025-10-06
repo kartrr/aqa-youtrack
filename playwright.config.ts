@@ -24,7 +24,8 @@ export default defineConfig({
       name: 'login-tests',
       testMatch: /.*\/login\/.*\.spec\.ts/,
       use: {
-        storageState: undefined, 
+        storageState: undefined,
+        browserName: 'chromium', 
       },
     },
     {
@@ -32,6 +33,7 @@ export default defineConfig({
       testMatch: /.*\/youtrack\/.*\.spec\.ts/,
       use: {
         storageState: 'playwright/.auth/storageState.json',
+        browserName: 'chromium',
       },
       dependencies: ['setup'],
     },
