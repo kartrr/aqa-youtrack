@@ -37,7 +37,6 @@ export default defineConfig({
         storageState: 'playwright/.auth/storageState.json',
         browserName: 'chromium',
       },
-      dependencies: ['setup'],
     },
   ],
 
