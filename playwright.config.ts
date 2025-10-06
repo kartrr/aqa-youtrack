@@ -3,6 +3,8 @@ dotenv.config();
 
 import { defineConfig } from '@playwright/test';
 
+const allureDetail = process.env.ALLURE_DETAIL !== 'false';
+
 export default defineConfig({
   testDir: './tests',
   use: {
@@ -41,7 +43,9 @@ export default defineConfig({
 
   reporter: [
     ['list'],
-    ['allure-playwright']
+    ['allure-playwright', {
+      detail: allureDetail
+    }]
   ],
   testIgnore: '**/.*',
 });

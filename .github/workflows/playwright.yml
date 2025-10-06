@@ -28,8 +28,17 @@ jobs:
         run: npm ci
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
-      - name: Run Playwright tests
-        run: npm test
+        #run login tests without details with masked password
+      - name: Run Login tests
+        run: npx playwright test --project=login-tests
+        env:
+          TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          ALLURE_DETAIL: 'false'
+        #run other tests with details
+      - name: Run YouTrack tests
+        run: npx playwright test --project=youtrack-tests
         env:
           TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}

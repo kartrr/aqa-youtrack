@@ -1,5 +1,6 @@
 import { type Locator, type Page, expect } from '@playwright/test';
 import { BasePage } from "./BasePage";
+import * as allure from "allure-js-commons";
 
 export class LoginPage extends BasePage {
     readonly page: Page;
@@ -18,6 +19,8 @@ export class LoginPage extends BasePage {
         this.errorMessage = page.getByTestId('error-message');
     }
 
+    
+
     async gotoPageUrl() {
         await this.page.goto(this.pageURL);
     }
@@ -30,6 +33,9 @@ export class LoginPage extends BasePage {
     }
 
     async login(username: string, password: string) {
+        await allure.parameter("username", username);
+        await allure.parameter("password", password, { mode: "masked" });
+        
         await this.usernameInput.fill(username);
         await this.passwordInput.fill(password);
         await this.loginButton.click();
