@@ -1,9 +1,7 @@
 # .github/workflows/playwright.yml
 
-# Name for the workflow
 name: Playwright Tests & Allure Report
 
-# Triggers the workflow
 on:
   push:
     branches: [ main ]
@@ -11,15 +9,12 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-# Sets top-level permissions
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# A workflow run is made up of one or more jobs
 jobs:
-  # This job runs the tests
   test:
     runs-on: ubuntu-latest
     steps:
@@ -41,39 +36,38 @@ jobs:
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
       - name: Upload Allure results
         uses: actions/upload-artifact@v4
-        if: always() # Always run this step to upload results even if tests fail
+        if: always()
         with:
           name: allure-results
           path: allure-results
           retention-days: 1
 
-  # This job generates and deploys the report
   deploy-report:
     needs: test
     runs-on: ubuntu-latest
     
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+      
     steps:
-      # Step 1: Download the allure-results artifact from the previous job
       - name: Download allure-results
         uses: actions/download-artifact@v4
         with:
           name: allure-results
           path: allure-results
 
-      # Step 2: Generate the Allure report from the results
       - name: Generate Allure Report
         uses: simple-elf/allure-report-action@v1.7
         with:
           results_path: allure-results
           report_path: allure-report
 
-      # Step 3: Upload the generated report as an artifact for deployment
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: allure-report
 
-      # Step 4: Deploy the artifact to GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
